@@ -135,8 +135,7 @@ def process_pdf_file(file_path: str, ocr_mode: str, custom_model: BaseModel = No
                 document=DocumentURLChunk(document_url=data_url),
                 model="mistral-ocr-latest"
             )
-            pdf_ocr_markdown = pdf_response.pages[0].markdown
-            
+            pdf_ocr_markdown = "\n\n".join(page.markdown for page in pdf_response.pages)
             response_format = custom_model if custom_model else StructuredOCR
             
             chat_response = client.chat.parse(
@@ -252,7 +251,7 @@ def process_url(url: str, doc_type: str, ocr_mode: str, custom_model: BaseModel 
                     document=DocumentURLChunk(document_url=url),
                     model="mistral-ocr-latest"
                 )
-                ocr_markdown = pdf_response.pages[0].markdown
+                ocr_markdown = "\n\n".join(page.markdown for page in pdf_response.pages)
                 content = [TextChunk(text=(
                     f"This is the PDF's OCR in markdown:\n{ocr_markdown}\n.\n"
                     "Convert this into a structured JSON response "
