@@ -2,3 +2,4 @@ streamlit
 pydantic
 mistralai
 python-dotenv
+openai
